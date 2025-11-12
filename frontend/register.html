@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реєстрація</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand fixed-top">
+        <div class="container">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html" title="Додому"><i class="fas fa-home"></i></a>
+                <a class="nav-link" href="cart.html" title="Кошик"><i class="fas fa-shopping-cart"></i></a>
+                <a class="nav-link" href="#search" title="Пошук"><i class="fas fa-search"></i></a>
+                <a class="nav-link" href="login.html" title="Авторизація"><i class="fas fa-sign-in-alt"></i></a>
+                <a class="nav-link" href="register.html" title="Реєстрація"><i class="fas fa-user-plus"></i></a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5 pt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title text-center">Реєстрація</h2>
+                        <form id="registerForm">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Ім'я користувача</label>
+                                <input type="text" class="form-control" id="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Пароль</label>
+                                <input type="password" class="form-control" id="password" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Підтвердити пароль</label>
+                                <input type="password" class="form-control" id="confirmPassword" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Зареєструватися</button>
+                        </form>
+                        <p class="text-center mt-3">Вже маєте акаунт? <a href="login.html">Увійти</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (password !== confirmPassword) {
+                alert('Паролі не співпадають');
+                return;
+            }
+            fetch('http://localhost:5000/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Помилка реєстрації');
+                }
+            })
+            .catch(error => console.error('Помилка:', error));
+        });
+    </script>
+</body>
+</html>

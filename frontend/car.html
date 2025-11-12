@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Деталі автомобіля</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand fixed-top">
+        <div class="container">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html" title="Додому"><i class="fas fa-home"></i></a>
+                <a class="nav-link" href="cart.html" title="Кошик"><i class="fas fa-shopping-cart"></i></a>
+                <a class="nav-link" href="#search" title="Пошук"><i class="fas fa-search"></i></a>
+                <a class="nav-link" href="login.html" title="Авторизація"><i class="fas fa-sign-in-alt"></i></a>
+                <a class="nav-link" href="register.html" title="Реєстрація"><i class="fas fa-user-plus"></i></a>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-5 pt-5">
+        <div id="car-details" class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        <img id="car-image" src="" alt="" class="img-fluid mb-3" style="max-height: 400px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-6">
+                        <h1 id="car-title" class="card-title"></h1>
+                        <p id="car-price" class="card-text fs-4 text-success fw-bold"></p>
+                        <p id="car-category" class="card-text"></p>
+                        <p id="car-year" class="card-text"></p>
+                        <p id="car-country" class="card-text"></p>
+                        <button class="btn btn-success btn-lg me-2" onclick="addToCart()">Додати до кошика</button>
+                        <a href="javascript:history.back()" class="btn btn-secondary btn-lg">Назад</a>
+                    </div>
+                </div>
+                <hr>
+                <h3>Технічні характеристики</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Двигун:</strong> <span id="car-engine"></span></li>
+                            <li class="list-group-item"><strong>Потужність:</strong> <span id="car-horsepower"></span></li>
+                            <li class="list-group-item"><strong>Трансмісія:</strong> <span id="car-transmission"></span></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Пробіг:</strong> <span id="car-mileage"></span></li>
+                            <li class="list-group-item"><strong>Колір:</strong> <span id="car-color"></span></li>
+                        </ul>
+                    </div>
+                </div>
+                <hr>
+                <h3>Опис</h3>
+                <p id="car-description" class="lead"></p>
+            </div>
+        </div>
+        <p id="error" class="text-danger text-center mt-3"></p>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const carId = urlParams.get('id');
+
+        if (carId) {
+            fetch(`http://localhost:5000/cars/${carId}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Не вдалося отримати дані');
+                    return response.json();
+                })
+                .then(car => {
+                    document.getElementById('car-title').textContent = `${car.brand} ${car.model}`;
+                    document.getElementById('car-image').src = car.image_url || 'https://via.placeholder.com/400';
+                    document.getElementById('car-price').textContent = `Ціна: $${car.price.toLocaleString('uk-UA')}`;
+                    document.getElementById('car-category').textContent = `Категорія: ${car.category}`;
+                    document.getElementById('car-year').textContent = `Рік: ${car.year}`;
+                    document.getElementById('car-country').textContent = `Країна: ${car.country}`;
+                    document.getElementById('car-engine').textContent = car.engine || 'Н/Д';
+                    document.getElementById('car-horsepower').textContent = car.horsepower ? `${car.horsepower} к.с.` : 'Н/Д';
+                    document.getElementById('car-transmission').textContent = car.transmission || 'Н/Д';
+                    document.getElementById('car-mileage').textContent = car.mileage ? `${car.mileage.toLocaleString('uk-UA')} км` : 'Н/Д';
+                    document.getElementById('car-color').textContent = car.color || 'Н/Д';
+                    document.getElementById('car-description').textContent = car.description || 'Опис відсутній.';
+                })
+                .catch(error => {
+                    console.error('Помилка:', error);
+                    document.getElementById('error').textContent = 'Помилка: ' + error.message;
+                });
+        } else {
+            document.getElementById('error').textContent = 'ID автомобіля не вказано';
+        }
+
+        function addToCart() {
+            if (carId) {
+                fetch('http://localhost:5000/cart', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: 1, car_id: parseInt(carId) })
+                })
+                    .then(response => response.json())
+                    .then(data => alert(data.message))
+                    .catch(error => console.error('Помилка:', error));
+            }
+        }
+    </script>
+</body>
+</html>

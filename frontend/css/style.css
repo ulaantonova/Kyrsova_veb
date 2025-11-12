@@ -1,0 +1,170 @@
+/* ================================================= */
+/* 1. ГЛОБАЛЬНІ СТИЛІ ТА ТЕМА           */
+/* ================================================= */
+
+body {
+    /* Основний шрифт сайту */
+    font-family: Arial, Helvetica, sans-serif;
+    /* Скидання базових відступів */
+    margin: 0;
+    padding: 0;
+    /* Основний темний фон для всього сайту. !important використовується для примусової заміни стилів Bootstrap */
+    background-color: rgba(37, 57, 62, 0.984) !important;
+    /* Колір тексту за замовчуванням (білий) */
+    color: white;
+}
+
+
+/* Стилі для фіксованої навігації */
+.navbar {
+    background-color: #1a2a3a; /* Темно-синій фон */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Стилі для посилань у навігації */
+.navbar .nav-link {
+    color: white !important;
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #f39c12 !important; /* Золотистий акцент при наведенні */
+}
+
+/* Стилі для іконок */
+.navbar .nav-link i {
+    margin-right: 5px;
+}
+
+/* Адаптація для пошуку на мобільних */
+@media (max-width: 768px) {
+    .navbar .container {
+        justify-content: space-around;
+    }
+}
+
+
+/* ================================================= */
+/* 2. СТИЛІ ДЛЯ ПОВНОЕКРАННИХ СЕКЦІЙ (НОВЕ)          */
+/* Цей розділ забезпечує, що кожна секція займає 100% висоти екрана (100vh) */
+/* ================================================= */
+
+/* Стиль для першої секції (Hero Section) */
+.hero-section {
+    /* Висота: 100% висоти вікна перегляду мінус висота навігації (приблизно 56px) */
+    min-height: calc(80vh - 56px); 
+    display: flex;
+    align-items: center; /* Центрує контент по вертикалі */
+    justify-content: center;
+    padding-top: 20px;
+    margin-bottom: 0 !important; /* Видалення відступів між секціями */
+
+    padding-top: 80px; 
+    padding-bottom: 20px;
+    margin-bottom: 0 !important;
+}
+
+/* Стиль для секцій країн (США, Німеччина, Японія) */
+.country-section {
+    position: relative;
+    /* Висота: 100% висоти вікна перегляду */
+    min-height: 100vh; 
+    
+    /* Властивості для центрування контенту */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Центрує контент по вертикалі */
+    align-items: center;     /* Центрує контент по горизонталі */
+    text-align: center;
+    
+    padding-top: 100px;
+    padding-bottom: 60px;
+    margin-bottom: 0 !important; /* Прибираємо нижній відступ, щоб секції "прилипали" */
+}
+
+.footer .list-unstyled li {
+    /* Примусово робимо текст білим */
+    color: white !important; 
+}
+
+/* --- СТИЛІ ДЛЯ ПОШУКУ В НАВІГАЦІЙНІЙ ПАНЕЛІ --- */
+
+.search-box {
+    /* Приховуємо за замовчуванням */
+    display: none;
+    /* Вирівнюємо елементи в ряд */
+    align-items: center;
+    /* Використовуємо flex для рівномірного розташування */
+    margin-left: 10px;
+}
+
+.search-box.active {
+    /* Робимо видимим, коли додано клас active */
+    display: flex;
+}
+
+#search-input {
+    /* Робимо поле вводу вузьким, коли сховано */
+    width: 0; 
+    /* Додаємо плавний перехід для ширини */
+    transition: width 0.3s ease-in-out, opacity 0.3s ease-in-out; 
+    opacity: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.search-box.active #search-input {
+    /* При розгортанні задаємо робочу ширину */
+    width: 250px; 
+    opacity: 1;
+    padding: 0.375rem 0.75rem; /* Повертаємо стандартний padding Bootstrap */
+    margin-right: 5px;
+}
+
+#search-btn {
+    /* Приховуємо кнопку пошуку за замовчуванням */
+    display: none;
+    /* Вирівнюємо кнопку */
+    margin-left: 5px;
+    background-color: #f39c12; /* Золотистий колір */
+    border-color: #f39c12;
+    color: white;
+}
+
+#search-btn:hover {
+    background-color: #e67e22; /* Трохи темніший золотистий при наведенні */
+    border-color: #e67e22;
+}
+
+#close-search-btn {
+    /* Вирівнюємо кнопку "X" */
+    margin-left: 5px;
+}
+
+.autocomplete-results {
+    /* Розташування */
+    position: absolute;
+    top: 100%; /* Розміщуємо під полем вводу */
+    left: 0;
+    /* Відображення */
+    width: 100%;
+    z-index: 1000; /* Перекриває інший контент */
+    background-color: #343a40; /* Темний фон, як у navbar */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    color: #fff;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.autocomplete-item {
+    padding: 8px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.autocomplete-item:hover {
+    background-color: #495057; /* Трохи світліше при наведенні */
+}

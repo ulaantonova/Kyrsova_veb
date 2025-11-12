@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин автомобілів</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <link rel="stylesheet" href="css/style.css">    
+     <link rel="stylesheet" href="css/japan.css">    
+    <link rel="stylesheet" href="css/germany.css"> 
+    <link rel="stylesheet" href="css/usa.css">     
+  </head>
+<body>
+   <nav class="navbar navbar-expand fixed-top bg-dark navbar-dark">
+    <div class="container">
+         <a class="navbar-brand text-white" href="index.html">АвтоСвіт</a> 
+        <div class="navbar-nav ms-auto">
+            
+            <a class="nav-link" href="#" id="search-icon" title="Пошук"><i class="fas fa-search"></i></a>
+            
+            <div id="search-box" class="search-box">
+                <input type="text" id="search-input" class="form-control" placeholder="Пошук авто...">
+
+                <div id="autocomplete-results" class="autocomplete-results"></div>
+
+                <button id="search-btn" class="btn btn-outline-light ms-2" title="Пошук">🔍</button>
+
+                <button id="close-search-btn" class="btn btn-close btn-close-white" title="Закрити"></button>
+            </div>
+            
+            <a class="nav-link" href="index.html" title="Додому"><i class="fas fa-home"></i></a>
+            <a class="nav-link" href="cart.html" title="Кошик"><i class="fas fa-shopping-cart"></i></a>
+            <a class="nav-link" href="login.html" title="Авторизація"><i class="fas fa-sign-in-alt"></i></a>
+            <a class="nav-link" href="register.html" title="Реєстрація"><i class="fas fa-user-plus"></i></a>
+        </div>
+    </div>
+</nav>
+    
+    <div class="container mt-5 pt-5">
+        <h1 class="display-3 text-white text-center mb-5">Car as a Lifestyle</h1>
+
+        <section class="hero-section row mb-5">
+            <div class="col-md-6 d-flex flex-column justify-content-center">
+                <h2 class="text-white mb-3">About us</h2>
+                <p class="text-white lead">
+                    Власне авто — це свобода, комфорт і стиль. Куди завгодно, коли завгодно, з повним контролем над своїм маршрутом. 
+                    Це також стиль життя — автомобіль показує ваш смак, статус і індивідуальність. 
+                    Потужні двигуни, сучасні технології, комфорт і безпека роблять кожну поїздку справжнім задоволенням.
+                </p>
+            </div>
+            <div class="col-md-6 d-flex flex-column justify-content-cente align-items-center">
+                <div class="video-container">
+                    <video class="myvideo" autoplay loop muted style="max-width: 100%; border-radius: 10px;">
+                        <source src="video/car.mp4" type="video/mp4">
+                        Ваш браузер не підтримує відтворення відео.
+                    </video>
+                </div>
+            </div>
+        </section>
+
+        <section class="country-section usa-theme">
+    <div class="container"> 
+    <h2 class="text-center mb-4">США</h2>
+        <p class="text-center lead mx-auto" style="max-width: 800px;">
+            Американські автомобілі – це потужність, великі розміри та свобода шосе. Легендарні маслкари та позашляховики, що формували автомобільну культуру.
+        </p>
+        
+        <div class="row row-cols-1 row-cols-md-3 g-4 car-brands-container">
+            <div class="col">
+                <div class="brand-card" onclick="window.location.href='usa.html?brand=Ford'">
+                    <img src="img/FORD.jfif" alt="Ford" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Ford</h5>
+                        <p class="card-text">Від маслкарів до найпопулярніших пікапів у світі.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="brand-card" onclick="window.location.href='usa.html?brand=Chevrolet'">
+                    <img src="img/chevrolet.jfif" alt="Chevrolet" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Chevrolet</h5>
+                        <p class="card-text">Культові моделі, включаючи Corvette та Camaro.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="brand-card" onclick="window.location.href='usa.html?brand=Tesla'">
+                    <img src="img/Tesla.jfif" alt="Tesla" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Tesla</h5>
+                        <p class="card-text">Революційна сила на ринку електромобілів.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="usa.html" class="country-btn btn mt-3">Переглянути всі моделі США</a>
+    </div>
+</section>
+
+        <section class="country-section mb-5 germany-theme">
+            <h2 class="text-center mb-4">Німеччина</h2>
+            <p class="text-center lead mx-auto" style="max-width: 800px;">
+                Німецькі автомобілі — це синонім інженерної досконалості, преміальної якості та високих технологій. Від спортивних Porsche до розкішних Mercedes – вони встановлюють світові стандарти.
+            </p>
+            
+            <div class="row row-cols-1 row-cols-md-4 g-4 car-brands-container">
+                <div class="col">
+                    <div class="brand-card" onclick="window.location.href='germany.html?brand=BMW'">
+                        <img src="img/Bmw.jfif" alt="BMW" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">BMW</h5>
+                            <p class="card-text">Справжній "драйверський" автомобіль та спортивний стиль.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="brand-card" onclick="window.location.href='germany.html?brand=Mercedes-Benz'">
+                        <img src="img/mersedes.jfif" alt="Mercedes" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Mercedes-Benz</h5>
+                            <p class="card-text">Розкіш, комфорт та неперевершена якість.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="brand-card" onclick="window.location.href='germany.html?brand=Audi'">
+                        <img src="img/audi.jfif" alt="Audi" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Audi</h5>
+                            <p class="card-text">Інновації, мінімалістичний дизайн та система Quattro.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="brand-card" onclick="window.location.href='germany.html?brand=Porsche'">
+                        <img src="img/porshee.jfif" alt="Porsche" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Porsche</h5>
+                            <p class="card-text">Спорткари, які стали легендами швидкості та дизайну.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="germany.html" class="country-btn btn mt-3">Переглянути всі моделі Німеччини</a>
+        </section>
+
+        
+        <section class="country-section mb-5 japan-theme">
+            <h2 class="text-center mb-4">Японія</h2>
+            <p class="text-center lead mx-auto" style="max-width: 800px;">
+                Японські автомобілі — це втілення надійності, ефективності та технологічного мінімалізму. Вони здобули світову славу завдяки економічності та довговічності.
+            </p>
+
+            <div class="row row-cols-1 row-cols-md-4 g-4 car-brands-container">
+                <div class="col">
+                    <div class="brand-card" onclick="window.location.href='japan.html?brand=Toyota'">
+                        <img src= "img/toyota.jpg" alt="Toyota" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Toyota</h5>
+                            <p class="card-text">Символ надійності та якості. Лідер у гібридних технологіях.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="brand-card" onclick="window.location.href='japan.html?brand=Honda'">
+                        <img src="img/honda.jfif" alt="Honda" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Honda</h5>
+                            <p class="card-text">Інноваційні двигуни та спортивний характер.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="brand-card" onclick="window.location.href='japan.html?brand=Nissan'">
+                        <img src="img/nissan.jfif" alt="Nissan" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Nissan</h5>
+                            <p class="card-text">Від електромобілів до легендарних спорткарів GT-R.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="brand-card" onclick="window.location.href='japan.html?brand=Mazda'">
+                        <img src="img/mazda.jfif" alt="Mazda" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">Mazda</h5>
+                            <p class="card-text">Елегантний дизайн Kodo та унікальні технології Skyactiv.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="japan.html" class="country-btn btn btn-outline-light mt-3">Переглянути всі моделі Японії</a>
+        </section>
+
+        <!-- Products Slider Section for Search Results -->
+        <section class="products-section mb-5">
+            <h2 class="text-center mb-4 text-white">Результати пошуку</h2>
+            <div id="error" class="text-center text-danger mb-3"></div>
+            <div id="products" class="slider"></div>
+        </section>
+
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="js/main.js"></script>
+    <script>
+        // Ініціалізація слайдера, якщо вона буде потрібна, але зараз відключена, 
+        // оскільки main.js тепер виводить авто у сітці (клас "row").
+    </script>
+
+    <footer class="footer mt-5 py-4">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5 class="text-white">Зв'яжіться з нами</h5>
+                    <ul class="list-unstyled small text-muted">
+                        <li><i class="fas fa-phone-alt me-2"></i> Телефон: **+38 (068) 756-45-67**</li>
+                        <li><i class="fas fa-phone-alt me-2"></i> Телефон: **+38 (099) 987-65-43**</li>
+                        <li><i class="fas fa-envelope me-2"></i> Email: **info@avtosvit.ua**</li>
+                    </ul>
+                </div>
+                
+                <div class="col-md-6">
+                    <h5 class="text-white">Ми в соцмережах</h5>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/" target="_blank" class="text-light mx-2"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="https://www.instagram.com/" target="_blank" class="text-light mx-2"><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="https://twitter.com/" target="_blank" class="text-light mx-2"><i class="fab fa-twitter fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 pt-3 border-top">
+                <p class="text-muted small mb-0">&copy; 2024 АвтоСвіт. Усі права захищені.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

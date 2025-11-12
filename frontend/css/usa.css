@@ -1,0 +1,206 @@
+/* --- Секція США на повну сторінку --- */
+.country-section.usa {
+    position: relative;
+    min-height: 100vh; /* займає всю висоту екрану */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* вирівнює контент по вертикалі */
+    align-items: center;
+    text-align: center;
+    color: white;
+    background-image: url('../img/США.jfif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 60px 20px;
+}
+
+/* затемнення фону для кращої читабельності */
+.country-section.usa::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 0;
+}
+
+.country-section.usa * {
+    position: relative;
+    z-index: 1; /* щоб текст був поверх затемнення */
+}
+
+/* Зображення у слайдері менші та естетичні */
+.country-section.usa .country-slider img {
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+}
+
+/* Кнопка */
+.country-section.usa .country-btn {
+    margin-top: 30px;
+    background: rgba(255,255,255,0.2);
+    border: 2px solid white;
+    color: white;
+    transition: 0.3s;
+}
+.country-section.usa .country-btn:hover {
+    background: rgb(255, 255, 255);
+    color: black;
+}
+
+/* ================================================= */
+/* usa.css - СТИЛІ ДЛЯ ТЕМИ США (Атмосфера 90-х)     */
+/* ================================================= */
+
+.country-section.usa-theme {
+    /* Фонове зображення. Використовуємо один із ваших файлів */
+    background-image: url('../img/США.jfif'); 
+    background-size: cover;
+    background-position: center bottom; 
+    background-repeat: no-repeat;
+    
+
+    min-height: 100vh;
+    position: relative;
+    overflow: hidden;
+    /* === ВИПРАВЛЕННЯ ПОЗИЦІОНУВАННЯ === */
+    /* Вирівнюємо контент до ВЕРХУ, а не до центру */
+    justify-content: flex-start !important; 
+    
+    /* Встановлюємо великий відступ зверху, щоб опустити контент від фіксованої навігації */
+    padding-top: 80px; 
+    padding-bottom: 6cqb;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    text-align: center;
+}
+
+/* Затемнення фону з неоновим відтінком */
+.country-section.usa-theme::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Темний оверлей з легким фіолетово-блакитним відтінком, як у неонових вивісках */
+    background: rgba(10, 5, 20, 0.75); 
+    z-index: 0;
+}
+
+/* Контент має бути вище оверлея */
+.country-section.usa-theme * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Стилі для заголовка та тексту (90-ті) */
+.usa-theme h2 {
+    color: #FF00AA; /* Яскраво-рожевий/неоновий */
+    text-shadow: 0 0 5px #FF00AA, 0 0 10px #FF00AA, 0 0 15px #00FFFF; /* Неоновий ефект */
+    font-family: 'Arial Black', sans-serif; 
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+.usa-theme p {
+    color: #E0E0E0;
+    font-family: 'Courier New', monospace; 
+    font-size: 1.1rem;
+}
+
+/* Стилі для кнопки */
+.country-section.usa-theme .country-btn {
+    background-color: #00FFFF; /* Яскравий блакитний */
+    color: #000000;
+    border: 2px solid #FF00AA; /* Рожева рамка */
+    box-shadow: 0 0 10px #00FFFF; 
+    /* ... інші стилі ... */
+}
+
+/* Стиль самої картки бренду */
+.usa-theme .brand-card {
+    position: relative; /* ВАЖЛИВО: для позиціонування підпису */
+    overflow: hidden;
+    cursor: pointer;
+    
+    /* Прибираємо старий фон і рамку, щоб залишилося лише зображення */
+    background-color: transparent; 
+    border: none;
+    
+    border-radius: 10px; 
+    box-shadow: 0 0 10px rgba(255, 0, 170, 0.3);
+    transition: all 0.3s ease;
+    text-align: left; /* Вирівнюємо текст оверлея */
+    height: 250px; /* Фіксуємо висоту картки для кращого контролю */
+}
+
+/* Ефект при наведенні */
+.usa-theme .brand-card:hover {
+    transform: translateY(-5px); 
+    box-shadow: 0 5px 20px rgba(0, 255, 255, 0.6); 
+    /* Рамка при наведенні */
+    outline: 2px solid #00FFFF; 
+    outline-offset: -2px; /* Щоб рамка була всередині */
+}
+
+/* Зображення в картці */
+.usa-theme .brand-card img {
+    height: 100%; /* Розтягуємо зображення на повну висоту картки */
+    object-fit: cover;
+    width: 100%;
+    border-bottom: none; /* Прибираємо стару нижню рамку */
+    border-radius: 10px;
+}
+
+/* Стилі для тіла картки (блоку з підписом) */
+.usa-theme .brand-card .card-body {
+    position: absolute; /* Позиціонуємо поверх зображення */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    
+    /* Напівпрозорий градієнт для ГАРНОЇ ЧИТАБЕЛЬНОСТІ */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4), transparent);
+    
+    /* Забезпечуємо, щоб текст був поверх градієнта */
+    z-index: 5;
+    
+    /* Приховуємо верхню частину підпису, якщо вона виходить за межі градієнта */
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 10px; 
+    border-bottom-right-radius: 10px;
+}
+
+/* Стилі для заголовків та тексту в оверлеї */
+.usa-theme .brand-card .card-title {
+    color: #00FFFF; /* Неоновий блакитний для заголовка */
+    font-weight: bold;
+    text-shadow: 0 0 5px #00FFFF; /* Більш помітне світіння */
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+.usa-theme .brand-card .card-text {
+    color: #E0E0E0;
+    font-size: 0.9rem;
+}
+
+.car-info-text {
+    /* Темно-сірий колір, який добре видно на світлому тлі картки */
+    color: #333 !important; 
+    font-weight: 600; /* Трохи жирніше для кращої читабельності */
+    font-size: 1.1em; /* Трохи збільшимо розмір */
+}
+
+/* Якщо потрібно змінити колір заголовка картки ("Ford Bronco") */
+.card-title {
+    color: #111 !important; /* Майже чорний колір */
+}
