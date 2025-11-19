@@ -34,9 +34,54 @@
         <div id="cart-summary" class="card p-3 mt-4 shadow-lg" style="display:none;">
             <div class="d-flex justify-content-between align-items-center">
                 <h4 id="cart-total-display" class="mb-0">Загальна сума: </h4>
-                <button class="btn btn-success btn-lg" id="checkout-btn">
+                <button class="btn btn-success btn-lg" id="checkout-btn" data-bs-toggle="modal" data-bs-target="#checkoutModal">
                     <i class="fas fa-credit-card me-2"></i> Придбати
                 </button>
+            </div>
+        </div>
+
+        <!-- Checkout Modal -->
+        <div class="modal fade" id="checkoutModal" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="checkoutModalLabel">Оформлення замовлення</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="checkout-form">
+                            <div class="mb-3">
+                                <label for="customer_name" class="form-label">Ім'я клієнта</label>
+                                <input type="text" class="form-control" id="customer_name" placeholder="Введіть ваше повне ім'я (наприклад, Іван Іванович Петренко)" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Адреса доставки</label>
+                                <textarea class="form-control" id="address" rows="3" placeholder="Введіть повну адресу доставки (вулиця, будинок, квартира, місто, поштовий індекс)" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Телефон</label>
+                                <input type="tel" class="form-control" id="phone" placeholder="Введіть номер телефону (наприклад, +38 (067) 123-45-67)" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" placeholder="Введіть електронну пошту (наприклад, example@email.com)" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="payment_method" class="form-label">Спосіб оплати</label>
+                                <select class="form-select" id="payment_method" required>
+                                    <option value="">Оберіть спосіб оплати</option>
+                                    <option value="Кредитна карта">Кредитна карта</option>
+                                    <option value="Готівка">Готівка</option>
+                                    <option value="Банківський переказ">Банківський переказ</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+                        <button type="button" class="btn btn-success" id="confirm-checkout-btn">Підтвердити замовлення</button>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -79,6 +124,7 @@
         // loadCart() та checkoutOrder() знаходяться у main.js
         document.addEventListener('DOMContentLoaded', loadCart);
         document.getElementById('checkout-btn').addEventListener('click', checkoutOrder);
+        document.getElementById('confirm-checkout-btn').addEventListener('click', confirmCheckout);
     </script>
 
 </body>

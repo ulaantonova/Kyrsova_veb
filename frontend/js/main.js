@@ -4,44 +4,52 @@
 
 // Допоміжна функція для додавання до кошика
 function addToCart(carId) {
-   console.log(`Спроба додати carId: ${carId} до кошика.`); // Додайте цю діагностику
-    
+    console.log(`Спроба додати carId: ${carId} до кошика.`);
+
+    //  дані користувача з localStorage
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+        alert('Будь ласка, увійдіть в систему, щоб додати товар до кошика.');
+        window.location.href = 'login.html';
+        return;
+    }
+
     fetch('http://localhost:5000/cart', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Важливо: body повинен відправляти car_id
-        body: JSON.stringify({ user_id: 1, car_id: carId }) 
+       
+        body: JSON.stringify({ user_id: user.id, car_id: carId })
     })
     .then(response => {
         // Перевірка статусу відповіді
         if (!response.ok) {
-            // Якщо сервер повернув 400 або 500, переходимо до обробки помилок
+            
             return response.json().then(err => { throw new Error(err.message || `Помилка: ${response.status}`) });
         }
         return response.json();
     })
     .then(data => {
-        alert(data.message); // Це повідомлення про успіх
-        // Додатково: оновіть іконку кошика або лічильник, якщо він є
+        alert(data.message); 
+       
     })
     .catch(error => {
         console.error('Помилка додавання до кошика:', error);
-        alert('Помилка додавання: ' + error.message); // Виводимо деталі помилки
+        alert('Помилка додавання: ' + error.message); 
     });
 }
 function toggleDetails(carId) {
     const detailsContainer = document.getElementById(`details-${carId}`);
     
-    // Перевіряємо, чи контейнер існує
+   
     if (!detailsContainer) {
         console.error(`Контейнер деталей для carId ${carId} не знайдено.`);
         return;
     }
     
-    // Якщо контейнер зараз прихований, показуємо його і завантажуємо дані
+ 
     if (detailsContainer.style.display === 'none') {
         
-        // 1. Змінюємо текст під час завантаження
+        
         detailsContainer.innerHTML = 'Завантаження опису...';
         detailsContainer.style.display = 'block';
         
@@ -52,7 +60,7 @@ function toggleDetails(carId) {
                 return response.json();
             })
             .then(car => {
-                // ПРИПУЩЕННЯ: у базі даних є поле 'description'
+               
                const description = car.description || "На жаль, детальний опис для цієї моделі відсутній."; 
                 const detailedInfo = `
                     <div class="alert alert-light mt-2 p-3" role="alert" style="border: 1px solid #ccc;">
@@ -76,7 +84,7 @@ function toggleDetails(carId) {
             });
             
     } else {
-        // Якщо контейнер видимий, приховуємо його
+        
         detailsContainer.style.display = 'none';
     }
 }
@@ -92,15 +100,20 @@ function loadCart() {
     const totalDisplay = document.getElementById('cart-total-display');
     const loadingMessage = document.getElementById('loading-message');
 
-    if (!container) return; // Вихід, якщо ми не на сторінці cart.html
+    if (!container) return; 
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+        loadingMessage.textContent = 'Будь ласка, увійдіть в систему, щоб переглянути кошик.';
+        return;
+    }
 
     loadingMessage.textContent = 'Завантаження кошика...';
     summaryCard.style.display = 'none';
     container.innerHTML = '';
     let totalPrice = 0;
-    const userId = 1; // Тестовий користувач
+    const userId = user.id;
 
-    fetch(`http://localhost:5000/cart/${userId}`) // Використовуємо маршрут з user_id
+    fetch(`http://localhost:5000/cart/${userId}`) 
         .then(response => response.json())
         .then(items => {
             if (items.length === 0) {
@@ -154,13 +167,21 @@ function removeFromCart(itemId) {
         return;
     }
 
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+        alert('Будь ласка, увійдіть в систему.');
+        return;
+    }
+
     fetch(`http://localhost:5000/cart/${itemId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user.id })
     })
     .then(response => response.json())
     .then(data => {
         alert(data.message);
-        loadCart(); // Перезавантажуємо кошик після видалення
+        loadCart();
     })
     .catch(error => {
         console.error('Помилка видалення:', error);
@@ -170,18 +191,54 @@ function removeFromCart(itemId) {
 
 // Функція для оформлення замовлення (Придбати)
 function checkoutOrder() {
-    if (!confirm('Ви підтверджуєте оформлення замовлення? Усі товари в кошику будуть придбані та видалені.')) {
+    
+}
+
+
+function confirmCheckout() {
+    const form = document.getElementById('checkout-form');
+    if (!form.checkValidity()) {
+        form.reportValidity();
         return;
     }
 
+    
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+        alert('Будь ласка, увійдіть в систему, щоб оформити замовлення.');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    const customer_name = document.getElementById('customer_name').value;
+    const address = document.getElementById('address').value;
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const payment_method = document.getElementById('payment_method').value;
+
+    const checkoutData = {
+        user_id: user.id,
+        customer_name,
+        address,
+        phone,
+        email,
+        payment_method
+    };
+
     fetch('http://localhost:5000/checkout', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(checkoutData)
     })
     .then(response => response.json())
     .then(data => {
         alert(data.message + ' ' + (data.total || ''));
-        loadCart(); // Очищаємо/оновлюємо кошик
+      
+        const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+        modal.hide();
+       
+        form.reset();
+        loadCart();
     })
     .catch(error => {
         console.error('Помилка оформлення:', error);
@@ -209,34 +266,34 @@ function toggleSearchBox() {
     const searchIcon = document.getElementById('search-icon');
     const searchInput = document.getElementById('search-input');
 
-    // Перемикаємо клас 'active' для видимості та анімації
+    
     searchBox.classList.toggle('active');
 
     if (searchBox.classList.contains('active')) {
-        // Якщо розгорнуто, приховуємо іконку лупи та фокусуємо поле вводу
+      
         searchIcon.style.display = 'none';
         searchInput.focus();
-        // Показуємо кнопку пошуку
+        
         const searchBtn = document.getElementById('search-btn');
         if (searchBtn) searchBtn.style.display = 'inline-block';
     } else {
-        // Якщо згорнуто, показуємо іконку лупи та очищуємо поле
+      
         searchIcon.style.display = 'block';
         searchInput.value = '';
-        // Приховуємо кнопку пошуку
+       
         const searchBtn = document.getElementById('search-btn');
         if (searchBtn) searchBtn.style.display = 'none';
     }
 }
 
 // =================================================================
-// 2. ЛОГІКА ДЛЯ СТОРІНОК КАТАЛОГУ (4 в ряд - usa.html, germany.html, etc.)
+// 2. ЛОГІКА ДЛЯ СТОРІНОК КАТАЛОГУ (usa.html, germany.html, etc.)
 // =================================================================
 
 const catalogContainer = document.getElementById('car-models-container');
 
 function generateCatalogCard(car) {
-    // Видалено клас h-100. Висоту контролюємо через min-height.
+    
     return `
         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="card product shadow-sm d-flex flex-column" style="min-height: 420px;"> 
@@ -275,23 +332,23 @@ function toggleDetails(carId, buttonElement) {
     
     if (!detailsContainer) return; 
 
-    // 1. Якщо контейнер видимий, приховуємо його
+    
     if (detailsContainer.style.display === 'block') {
         detailsContainer.style.display = 'none';
         buttonElement.textContent = 'Деталі';
         return;
     }
     
-    // 2. Відкриваємо поточний контейнер
+    
     detailsContainer.style.display = 'block';
     buttonElement.textContent = 'Приховати';
 
-    // 3. Якщо дані вже завантажені (перший клік), просто показуємо їх
+   
     if (detailsContainer.getAttribute('data-loaded') === 'true') {
         return; 
     }
 
-    // 4. Завантаження даних з Flask (відбувається лише один раз)
+    
     detailsContainer.innerHTML = '<span class="text-secondary small">Завантаження опису...</span>';
     
     fetch(`http://localhost:5000/cars/${carId}`)
@@ -326,7 +383,7 @@ function loadCatalog() {
     const { country, brand } = getCountryAndBrand();
     if (!country) return;
 
-    // Формування URL для бекенду з фільтрами
+   
     let apiUrl = `http://localhost:5000/cars?country=${country}`;
     let titleText = `Каталог Моделей ${country}`;
     
@@ -335,7 +392,7 @@ function loadCatalog() {
         titleText = `Моделі ${brand} (${country})`;
     }
     
-    // Оновлення заголовка сторінки
+    
     const catalogTitle = document.querySelector('.country-section h1');
     if (catalogTitle) {
          catalogTitle.textContent = titleText;
@@ -344,7 +401,7 @@ function loadCatalog() {
     fetch(apiUrl)
         .then(response => {
             if (!response.ok) {
-                // Викидаємо помилку, якщо статус 400/500
+            
                 throw new Error(`Помилка сервера: Статус ${response.status}`);
             }
             return response.json();
@@ -353,10 +410,13 @@ function loadCatalog() {
             catalogContainer.innerHTML = '';
             if (!Array.isArray(cars)) throw new Error("Некоректний формат даних від сервера.");
 
-            if (cars.length === 0) {
+            // Remove duplicates based on id
+            const uniqueCars = cars.filter((car, index, self) => self.findIndex(c => c.id === car.id) === index);
+
+            if (uniqueCars.length === 0) {
                 catalogContainer.innerHTML = '<div class="col-12"><p class="text-center lead text-warning">На жаль, моделі не знайдено.</p></div>';
             } else {
-                cars.forEach(car => {
+                uniqueCars.forEach(car => {
                     catalogContainer.innerHTML += generateCatalogCard(car);
                 });
             }
@@ -375,7 +435,7 @@ function loadCatalog() {
 
 const productsContainer = document.getElementById('products');
 const searchInput = document.getElementById('search-input');
-const errorContainer = document.getElementById('error'); // Для повідомлень про помилки пошуку
+const errorContainer = document.getElementById('error'); 
 const BACKEND_URL = 'http://127.0.0.1:5000/cars';
 const searchIcon = document.getElementById('search-icon');
 const closeBtn = document.getElementById('close-search-btn');
@@ -391,22 +451,22 @@ function fetchCars(query = '') {
              return response.json();
         })
         .then(cars => {
-            //  1. Деініціалізація слайдера ПЕРЕД очищенням контейнера (Важливо!)
+            
             if (typeof $ !== 'undefined' && typeof $.fn.slick !== 'undefined' && $('.slider').hasClass('slick-initialized')) {
                 $('.slider').slick('unslick');
             }
 
             productsContainer.innerHTML = '';
-            errorContainer.textContent = ''; // Очищаємо попередні помилки
+            errorContainer.textContent = ''; 
 
             if (cars.length === 0) {
-                // Відображаємо повідомлення про відсутність результатів
+               
                 if (query) {
                     alert(`Автомобілів за запитом "${query}" не знайдено.`);
                 }
                 errorContainer.textContent = `Автомобілів за запитом "${query}" не знайдено.`;
             } else {
-                // Ваш оригінальний код для відображення карток слайдера
+                
                 cars.forEach(car => {
                     const div = document.createElement('div');
                     div.className = 'product card m-2';
@@ -427,9 +487,9 @@ function fetchCars(query = '') {
                     productsContainer.appendChild(div);
                 });
 
-                // Ініціалізація Slick Слайдера
+              
                 if (typeof $ !== 'undefined' && typeof $.fn.slick !== 'undefined') {
-                    // Перевіряємо, чи слайдер вже ініціалізований
+                
                     if ($('.slider').hasClass('slick-initialized')) {
                          $('.slider').slick('unslick');
                     }
@@ -474,7 +534,7 @@ function updateAutocomplete(query) {
                     item.onclick = () => {
                         searchInput.value = `${car.brand} ${car.model}`;
                         autocompleteResults.style.display = 'none';
-                        toggleSearchBox(); // Close the search box
+                        toggleSearchBox(); 
                         window.location.href = `car.html?id=${car.id}`;
                     };
                     autocompleteResults.appendChild(item);
@@ -495,29 +555,24 @@ function updateAutocomplete(query) {
 // =================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    //  НОВИЙ КОД: ПРИЗНАЧЕННЯ ОБРОБНИКІВ ПОШУКУ
-  if (searchIcon && closeBtn) {
-        // Відкриваємо пошукову стрічку по кліку на лупу
+   
+  if (searchIcon && closeBtn) { 
         searchIcon.addEventListener('click', (e) => {
             e.preventDefault();
             toggleSearchBox();
         });
-
-        // Закриваємо пошукову стрічку по кліку на "X"
         closeBtn.addEventListener('click', toggleSearchBox);
     }
 
-    // Додаємо обробник для кнопки пошуку
+ 
     const searchBtn = document.getElementById('search-btn');
     if (searchBtn) {
         console.log("ДІАГНОСТИКА: Кнопка 'search-btn' знайдена.");
         searchBtn.addEventListener('click', () => {
             const query = searchInput.value;
-        
-        // ❗ ДОДАТКОВЕ ДІАГНОСТИЧНЕ ПОВІДОМЛЕННЯ
-        console.log(`ДІАГНОСТИКА: Кнопка натиснута. Запит: "${query}"`); // [2] ПЕРЕВІРКА КЛІКУ
+      
+        console.log(` Кнопка натиснута. Запит: "${query}"`); 
 
-        // Відображаємо повідомлення про завантаження, щоб бачити, що JS працює
         if (productsContainer) {
              productsContainer.innerHTML = '<div class="col-12 text-center">🔍 Шукаємо...</div>';
         }
@@ -526,24 +581,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     
-    // 1. Запускаємо логіку каталогу (якщо знаходимо контейнер 'car-models-container')
+   
     if (document.getElementById('car-models-container')) {
         loadCatalog();
     } 
     
-    // 2. Запускаємо логіку головної сторінки (якщо знаходимо контейнер 'products')
-    else if (productsContainer) {
-        // fetchCars() викликається без аргументів при завантаженні
-        fetchCars(); 
-        
-        // Перевіряємо, чи існує стрічка пошуку (тепер вона в навігації)
+     
+    else if (productsContainer) {  
+       fetchCars();   
        if (searchInput) {
-            // Прив'язуємо подію "введення" для автозаповнення
+           
             searchInput.addEventListener('input', () => {
                 updateAutocomplete(searchInput.value);
             });
-
-            // Прив'язуємо подію "keydown" для пошуку по Enter
             searchInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     fetchCars(searchInput.value);
@@ -553,10 +603,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // 3. Запускаємо логіку кошика
+    
     if (document.getElementById('cart-items-container')) {
         loadCart();
-        // Прив'язуємо оформлення замовлення
+       
         document.getElementById('checkout-btn').addEventListener('click', checkoutOrder);
     }
 });

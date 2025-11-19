@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Адмін панель - АвтоСвіт</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand fixed-top bg-dark navbar-dark">
+        <div class="container">
+            <a class="navbar-brand text-white" href="index.html">АвтоСвіт</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html" title="Додому"><i class="fas fa-home"></i></a>
+                <span id="admin-info" class="navbar-text text-white me-3" style="display:none;">Адмін: <span id="admin-username"></span></span>
+                <button id="logout-btn" class="btn btn-outline-light btn-sm" style="display:none;">Вийти</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 pt-5">
+        <!-- Login Form -->
+        <div id="login-section" class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h4>Вхід в адмін панель</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="admin-login-form">
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Ім'я користувача</label>
+                                <input type="text" class="form-control" id="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Пароль</label>
+                                <input type="password" class="form-control" id="password" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Увійти</button>
+                        </form>
+                        <div id="login-message" class="mt-3 text-center" style="display:none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div id="admin-panel" style="display:none;">
+            <h1 class="mb-4 text-center">Адмін панель</h1>
+
+            <!-- Navigation Tabs -->
+            <ul class="nav nav-tabs" id="admin-tabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="cars-tab" data-bs-toggle="tab" data-bs-target="#cars" type="button" role="tab">Автомобілі</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">Користувачі</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab">Замовлення</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="admin-tab-content">
+                <!-- Cars Tab -->
+                <div class="tab-pane fade show active" id="cars" role="tabpanel">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Список автомобілів</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="cars-container" class="row">
+                                        <p class="text-center">Завантаження автомобілів...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Tab -->
+                <div class="tab-pane fade" id="users" role="tabpanel">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Список користувачів</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="users-container" class="row">
+                                        <p class="text-center">Завантаження користувачів...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Tab -->
+                <div class="tab-pane fade" id="orders" role="tabpanel">
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>Список замовлень</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="orders-container" class="row">
+                                        <p class="text-center">Завантаження замовлень...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editModal" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Редагувати автомобіль</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="edit-car-form" enctype="multipart/form-data">
+                                <input type="hidden" id="edit-car-id">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="edit-brand" class="form-label">Бренд</label>
+                                            <input type="text" class="form-control" id="edit-brand" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-model" class="form-label">Модель</label>
+                                            <input type="text" class="form-control" id="edit-model" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-price" class="form-label">Ціна ($)</label>
+                                            <input type="number" class="form-control" id="edit-price" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-category" class="form-label">Категорія</label>
+                                            <input type="text" class="form-control" id="edit-category" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-year" class="form-label">Рік</label>
+                                            <input type="number" class="form-control" id="edit-year" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="edit-country" class="form-label">Країна</label>
+                                            <input type="text" class="form-control" id="edit-country" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-engine" class="form-label">Двигун</label>
+                                            <input type="text" class="form-control" id="edit-engine">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-horsepower" class="form-label">Потужність (к.с.)</label>
+                                            <input type="number" class="form-control" id="edit-horsepower">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-transmission" class="form-label">Трансмісія</label>
+                                            <input type="text" class="form-control" id="edit-transmission">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-mileage" class="form-label">Пробіг</label>
+                                            <input type="number" class="form-control" id="edit-mileage">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-color" class="form-label">Колір</label>
+                                            <input type="text" class="form-control" id="edit-color">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-image" class="form-label">Фото</label>
+                                            <input type="file" class="form-control" id="edit-image" accept="image/*">
+                                            <small class="form-text text-muted">Залиште пустим, якщо не змінюєте фото</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="edit-description" class="form-label">Опис</label>
+                                    <textarea class="form-control" id="edit-description" rows="3"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+                            <button type="button" class="btn btn-primary" id="save-changes-btn">Зберегти зміни</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer mt-5 py-4">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <h5 class="text-white">Зв'яжіться з нами</h5>
+                    <ul class="list-unstyled small text-white">
+                        <li><i class="fas fa-phone-alt me-2"></i> Телефон: +38 (067) 123-45-67</li>
+                        <li><i class="fas fa-phone-alt me-2"></i> Телефон: +38 (099) 987-65-43</li>
+                        <li><i class="fas fa-envelope me-2"></i> Email: info@avtosvit.ua</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="text-white">Ми в соцмережах</h5>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/" target="_blank" class="text-light mx-2"><i class="fab fa-facebook fa-2x"></i></a>
+                        <a href="https://www.instagram.com/" target="_blank" class="text-light mx-2"><i class="fab fa-instagram fa-2x"></i></a>
+                        <a href="https://twitter.com/" target="_blank" class="text-light mx-2"><i class="fab fa-twitter fa-2x"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 pt-3 border-top">
+                <p class="text-muted small mb-0">&copy; 2024 АвтоСвіт. Усі права захищені.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
+
+</body>
+</html>

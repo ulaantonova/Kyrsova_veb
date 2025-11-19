@@ -1,12 +1,6 @@
-/* ================================================= */
-/* japan.css - СТИЛІ ДЛЯ ТЕМИ ЯПОНІЇ                 */
-/* Тема: Сакура, Мінімалізм (Рожевий/Білий/Сірий)    */
-/* ================================================= */
 
-/* Стилі для секції на повну ширину */
 .country-section.japan-theme {
-    /* Фонове зображення: Наприклад, храм серед сакури або міський пейзаж */
-    /* Використовуємо placeholder до вашого завантаження */
+   
     background-image: url('../img/japan.jpg'); 
     
     background-size: cover;       
@@ -25,7 +19,7 @@
     padding-bottom: 60px;
 }
 
-/* Затемнення фону: Дуже світлий, але прозорий рожевий оверлей */
+
 .country-section.japan-theme::before {
     content: "";
     position: absolute;
@@ -37,42 +31,38 @@
     z-index: 0;
 }
 
-/* Контент (текст) має бути вище оверлея, робимо його темним */
+
 .country-section.japan-theme * {
     position: relative;
     z-index: 1;
-    color: #000000; /* Темний текст, щоб читався на світлому фоні */
+    color: #000000; 
 }
 
-/* Стилі для заголовка та тексту */
+
 .japan-theme h2 {
-    color: #c321df; /* Глибокий рожево-фіолетовий (колір сакури) */
+    color: #c321df; 
     text-shadow: 0 0 5px rgba(236, 236, 236, 0.3); 
     text-transform: uppercase;
     font-weight: 800;
     letter-spacing: 3px;
-    border-bottom: 2px solid #E91E63; /* Яскравий рожевий акцент */
+    border-bottom: 2px solid #E91E63; 
     padding-bottom: 5px;
 }
 
 .japan-theme p {
-    color: #373333; /* Темно-сірий текст */
+    color: #373333; 
     font-size: 1.1rem;
 }
 
-/* ================================================= */
-/* !!! СТИЛІ КАРТОК: ОВЕРЛЕЙ НАД ФОТО !!!            */
-/* ================================================= */
 
-/* Стиль самої картки бренду */
 .japan-theme .brand-card {
     position: relative; 
     overflow: hidden;
     cursor: pointer;
     background-color: transparent; 
     border: none;
-    border-radius: 5px; /* Мінімалістичні кути */
-    box-shadow: 0 0 10px rgba(156, 39, 176, 0.3); /* Легке рожеве світіння */
+    border-radius: 5px; 
+    box-shadow: 0 0 10px rgba(156, 39, 176, 0.3); 
     transition: all 0.3s ease;
     text-align: left; 
     height: 250px; 
@@ -81,12 +71,12 @@
 /* Ефект при наведенні */
 .japan-theme .brand-card:hover {
     transform: translateY(-3px); 
-    box-shadow: 0 5px 15px rgba(233, 30, 99, 0.7); /* Яскраво-рожеве світіння */
-    outline: 2px solid #E91E63; /* Яскрава рамка при наведенні */
+    box-shadow: 0 5px 15px rgba(233, 30, 99, 0.7); 
+    outline: 2px solid #E91E63; 
     outline-offset: -2px; 
 }
 
-/* Зображення в картці */
+
 .japan-theme .brand-card img {
     height: 100%; 
     object-fit: cover;
@@ -94,7 +84,7 @@
     border-radius: 5px;
 }
 
-/* Стилі для тіла картки (блоку з підписом) */
+
 .japan-theme .brand-card .card-body {
     position: absolute; 
     bottom: 0;
@@ -102,7 +92,7 @@
     width: 100%;
     padding: 15px;
     
-    /* Градієнт, але цього разу від прозорого до рожевого/білого, щоб пасувати темі */
+   
     background: linear-gradient(to top, rgba(16, 15, 15, 0.9), rgba(0, 0, 0, 0.4), transparent);
     
     z-index: 5;
@@ -110,11 +100,11 @@
     border-bottom-right-radius: 5px;
 }
 
-/* Стилі для заголовків та тексту в оверлеї */
+
 .japan-theme .brand-card .card-title {
-    color: #9C27B0; /* Колір сакури для заголовка */
+    color: #9C27B0; 
     font-weight: bold;
-    text-shadow: 0 0 2px #f80af0; /* Невелике темне тіні, щоб читалось на світлому фоні */
+    text-shadow: 0 0 2px #f80af0; 
     margin-bottom: 5px;
     line-height: 1.2;
 }
@@ -123,10 +113,9 @@
     font-size: 0.9rem;
 }
 
-/* Стиль для кнопки "Переглянути всі моделі" */
+
 .country-section.japan-theme .country-btn {
-    background-color: #E91E63; /* Яскравий рожевий акцент */
-    color: white; 
+    background-color: #E91E63; 
     border: 2px solid #E91E63;
     font-weight: 700;
     box-shadow: 0 0 10px rgba(233, 30, 99, 0.5);

@@ -2,9 +2,11 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
-from sqlalchemy import or_ 
+from sqlalchemy import or_
+from sqlalchemy.orm import joinedload, selectinload
 import json
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -57,9 +59,10 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
     role = db.Column(db.String(20), default='user', nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     def to_dict(self):
-        return {'id': self.id, 'username': self.username, 'email': self.email, 'role': self.role}
+        return {'id': self.id, 'username': self.username, 'email': self.email, 'role': self.role, 'created_at': self.created_at.isoformat()}
 
 # Admin user creation
 def create_admin():
@@ -74,10 +77,10 @@ def create_admin():
 
 class CartItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, default=1) 
+    user_id = db.Column(db.Integer, default=1)
     car_id = db.Column(db.Integer, db.ForeignKey('car.id'), nullable=False)
     quantity = db.Column(db.Integer, default=1, nullable=False) # 🛑 ВИПРАВЛЕНО: ПОВЕРНУЛИ quantity
-    
+
     car = db.relationship('Car', backref=db.backref('cart_items', lazy=True))
 
     def to_dict(self):
@@ -86,6 +89,49 @@ class CartItem(db.Model):
             'user_id': self.user_id,
             'car_id': self.car_id,
             'quantity': self.quantity, # Повертаємо quantity
+            'car_details': self.car.to_dict() if self.car else None
+        }
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    order_date = db.Column(db.DateTime, default=datetime.utcnow)
+    total_price = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(50), default='Оформлено')
+
+    user = db.relationship('User', backref=db.backref('orders', lazy=True))
+    items = db.relationship('OrderItem', backref='order', lazy=True)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'order_date': self.order_date.isoformat(),
+            'total_price': self.total_price,
+            'status': self.status,
+            'customer_name': self.user.username if self.user else 'Невідомий користувач',
+            'email': self.user.email if self.user else 'Невідомий',
+            'phone': None,  # No phone in user model
+            'cars': ', '.join([f"{item.car.brand if item.car else 'Невідомий'} {item.car.model if item.car else 'товар'} (x{item.quantity})" for item in self.items]) if self.items else 'Немає товарів',
+            'user': self.user.to_dict() if self.user else {'username': 'Невідомий', 'email': 'Невідомий'},
+            'items': [item.to_dict() for item in self.items]
+        }
+
+class OrderItem(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    car_id = db.Column(db.Integer, db.ForeignKey('car.id'), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, nullable=False)
+
+    car = db.relationship('Car', backref=db.backref('order_items', lazy=True))
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'car_id': self.car_id,
+            'quantity': self.quantity,
+            'price': self.price,
             'car_details': self.car.to_dict() if self.car else None
         }
 # ==================================
@@ -180,10 +226,10 @@ def add_to_cart():
     #  ЛОГІКА ТЕПЕР ПРАЦЮЄ З quantity
     data = request.get_json()
     car_id = data.get('car_id')
-    user_id = 1 
+    user_id = data.get('user_id')
 
-    if not car_id:
-        return jsonify({"message": "Необхідно вказати ID автомобіля"}), 400
+    if not car_id or not user_id:
+        return jsonify({"message": "Необхідно вказати ID автомобіля та користувача"}), 400
 
     car = Car.query.get(car_id)
     if not car:
@@ -206,11 +252,17 @@ def add_to_cart():
 @app.route('/cart/<int:item_id>', methods=['DELETE'])
 def remove_from_cart(item_id):
     # ЛОГІКА ПРАЦЮЄ З ID ЕЛЕМЕНТА КОШИКА
-    item = CartItem.query.filter_by(id=item_id, user_id=1).first() 
-    
+    data = request.get_json()
+    user_id = data.get('user_id')
+
+    if not user_id:
+        return jsonify({"message": "Необхідно вказати ID користувача"}), 400
+
+    item = CartItem.query.filter_by(id=item_id, user_id=user_id).first()
+
     if not item:
         return jsonify({'message': 'Елемент кошика не знайдено.'}), 404
-        
+
     db.session.delete(item)
     db.session.commit()
     return jsonify({'message': 'Автомобіль успішно видалено з кошика.'})
@@ -218,23 +270,65 @@ def remove_from_cart(item_id):
 @app.route('/checkout', methods=['POST'])
 def checkout():
     # ЛОГІКА ПРАЦЮЄ З quantity
-    user_id = 1
+    data = request.get_json()
+    user_id = data.get('user_id')
+
+    if not user_id:
+        return jsonify({"message": "Необхідно вказати ID користувача"}), 400
+
     items = CartItem.query.filter_by(user_id=user_id).all()
-    
+
     if not items:
         return jsonify({'message': 'Ваш кошик порожній. Додайте товари для придбання.'}), 400
-        
+
     total_price = sum(item.car.price * item.quantity for item in items)
-    
+
+    # Створюємо замовлення
+    order = Order(user_id=user_id, total_price=total_price)
+    db.session.add(order)
+    db.session.flush()  # Щоб отримати order.id
+
+    # Створюємо елементи замовлення
     for item in items:
-        db.session.delete(item) 
-    
+        order_item = OrderItem(
+            order_id=order.id,
+            car_id=item.car_id,
+            quantity=item.quantity,
+            price=item.car.price
+        )
+        db.session.add(order_item)
+
+    # Видаляємо елементи кошика
+    for item in items:
+        db.session.delete(item)
+
     db.session.commit()
-    
+
     return jsonify({
         'message': ' Вітаємо! Ваше замовлення успішно оформлено!',
-        'total': f'Загальна сума: ${total_price:,.2f}'
+        'total': f'Загальна сума: ${total_price:,.2f}',
+        'order_id': order.id
     }), 200
+
+@app.route('/users', methods=['GET'])
+def get_users():
+    users = User.query.all()
+    return jsonify([user.to_dict() for user in users])
+
+@app.route('/orders', methods=['GET'])
+def get_orders():
+    orders = Order.query.all()
+    return jsonify([order.to_dict() for order in orders])
+
+@app.route('/admin/users', methods=['GET'])
+def get_admin_users():
+    users = User.query.all()
+    return jsonify([user.to_dict() for user in users])
+
+@app.route('/admin/orders', methods=['GET'])
+def get_admin_orders():
+    orders = Order.query.options(joinedload(Order.user), selectinload(Order.items).joinedload(OrderItem.car)).order_by(Order.order_date.desc()).all()
+    return jsonify([order.to_dict() for order in orders])
 
 
 # Обробка помилок

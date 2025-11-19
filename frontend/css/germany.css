@@ -1,12 +1,6 @@
 
-/* ================================================= */
-/* germany.css - СТИЛІ ДЛЯ ТЕМИ НІМЕЧЧИНИ            */
-/* Тема: Преміум, Точність, Суворість (Срібло/Чорний/Червоний) */
-/* ================================================= */
-
-/* Стилі для секції на повну ширину */
 .country-section.germany-theme {
-    /* Фонове зображення: Наприклад, автобан або сучасна архітектура */
+
     background-image: url('../img/Sobor.jfif'); 
     background-size: cover;       
     background-position: center;  
@@ -23,7 +17,7 @@
     padding-bottom: 60px;
 }
 
-/* Затемнення фону: Суворий, темний оверлей */
+
 .country-section.germany-theme::before {
     content: "";
     position: absolute;
@@ -31,25 +25,25 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* Глибокий чорний оверлей */
+   
     background: rgba(10, 10, 10, 0.85); 
     z-index: 0;
 }
 
-/* Контент має бути вище оверлея */
+
 .country-section.germany-theme * {
     position: relative;
     z-index: 1;
 }
 
-/* Стилі для заголовка та тексту */
+
 .germany-theme h2 {
-    color: #C0C0C0; /* Сріблястий/Сірий */
+    color: #C0C0C0; 
     text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); 
     text-transform: uppercase;
     font-weight: 800;
     letter-spacing: 3px;
-    border-bottom: 3px solid #E53935; /* Червоний акцент */
+    border-bottom: 3px solid #E53935; 
     padding-bottom: 5px;
 }
 
@@ -58,21 +52,15 @@
     font-size: 1.1rem;
 }
 
-/* ================================================= */
-/* !!! СТИЛІ КАРТОК: ОВЕРЛЕЙ НАД ФОТО !!!            */
-/* Використовуємо аналогічний механізм, але з іншою темою */
-/* ================================================= */
 
-/* Стиль самої картки бренду */
 .germany-theme .brand-card {
     position: relative; 
     overflow: hidden;
     cursor: pointer;
     background-color: transparent; 
     border: none;
-    border-radius: 8px; /* Більш суворі, менші кути */
-    box-shadow: 0 0 10px rgba(229, 57, 53, 0.2); /* Легке червоне світіння */
-    transition: all 0.3s ease;
+    border-radius: 8px; 
+    box-shadow: 0 0 10px rgba(229, 57, 53, 0.2); 
     text-align: left; 
     height: 250px; 
 }
@@ -80,12 +68,12 @@
 /* Ефект при наведенні */
 .germany-theme .brand-card:hover {
     transform: scale(1.03); 
-    box-shadow: 0 5px 20px rgba(192, 192, 192, 0.5); /* Сріблясте світіння */
-    outline: 2px solid #E53935; /* Червона рамка при наведенні */
+    box-shadow: 0 5px 20px rgba(192, 192, 192, 0.5); 
+    outline: 2px solid #E53935; 
     outline-offset: -2px; 
 }
 
-/* Зображення в картці */
+
 .germany-theme .brand-card img {
     height: 100%; 
     object-fit: cover;
@@ -93,15 +81,14 @@
     border-radius: 8px;
 }
 
-/* Стилі для тіла картки (блоку з підписом) */
+
 .germany-theme .brand-card .card-body {
     position: absolute; 
     bottom: 0;
     left: 0;
     width: 100%;
     padding: 15px;
-    
-    /* Напівпрозорий градієнт для ГАРНОЇ ЧИТАБЕЛЬНОСТІ */
+   
     background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4), transparent);
     
     z-index: 5;
@@ -109,20 +96,19 @@
     border-bottom-right-radius: 8px;
 }
 
-/* Стилі для заголовків та тексту в оверлеї */
 .germany-theme .brand-card .card-title {
-    color: #E53935; /* Червоний акцент для заголовка */
+    color: #E53935; 
     font-weight: bold;
     text-shadow: 0 0 5px #E53935; 
     margin-bottom: 5px;
     line-height: 1.2;
 }
 .germany-theme .brand-card .card-text {
-    color: #C0C0C0; /* Сріблястий для тексту */
+    color: #C0C0C0; 
     font-size: 0.9rem;
 }
 
-/* Стиль для кнопки "Переглянути всі моделі" */
+
 .country-section.germany-theme .country-btn {
     background-color: #E53935; 
     color: white; 

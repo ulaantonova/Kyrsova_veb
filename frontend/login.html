@@ -27,7 +27,7 @@
                         <h2 class="card-title text-center">Авторизація</h2>
                         <form id="loginForm">
                             <div class="mb-3">
-                                <label for="username" class="form-label">Ім'я користувача</label>
+                                <label for="username" class="form-label">Ім'я користувача або Email</label>
                                 <input type="text" class="form-control" id="username" required>
                             </div>
                             <div class="mb-3">
@@ -36,6 +36,9 @@
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Увійти</button>
                         </form>
+                        <p class="text-center mt-3">
+                            <a href="admin.html" class="text-decoration-none">Вхід для адміністратора</a>
+                        </p>
                         <p class="text-center mt-3">Немає акаунту? <a href="register.html">Зареєструватися</a></p>
                     </div>
                 </div>
@@ -54,7 +57,9 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.message) {
+                if (data.message && data.user) {
+                    // Зберігаємо дані користувача в localStorage
+                    localStorage.setItem('user', JSON.stringify(data.user));
                     alert(data.message);
                     window.location.href = 'index.html';
                 } else {

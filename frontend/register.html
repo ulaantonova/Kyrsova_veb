@@ -68,9 +68,11 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.message) {
+                if (data.message && data.user) {
+                    // Зберігаємо дані користувача в localStorage
+                    localStorage.setItem('user', JSON.stringify(data.user));
                     alert(data.message);
-                    window.location.href = 'login.html';
+                    window.location.href = 'index.html';
                 } else {
                     alert('Помилка реєстрації');
                 }
