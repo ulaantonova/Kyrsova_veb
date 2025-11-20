@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
@@ -7,7 +7,7 @@ from sqlalchemy.orm import joinedload, selectinload
 import json
 import os
 from datetime import datetime
-
+from flask import render_template
 app = Flask(__name__)
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -143,6 +143,10 @@ class OrderItem(db.Model):
 #     db.create_all() # ЦЕЙ РЯДОК ПОТРІБНО ПЕРЕМІСТИТИ В init_db!
 
 # УНІВЕРСАЛЬНИЙ МАРШРУТ /cars:
+@app.route('/')
+def index():
+    return render_template('index.html')
+
 @app.route('/cars', methods=['GET'])
 def get_cars():
     country = request.args.get('country')
